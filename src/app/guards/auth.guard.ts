@@ -22,7 +22,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const user = authService.currentUser();
 
   if (!user) {
-    router.navigate(['/login']);
+    router.navigate(['/home']);
     return false;
   }
 
