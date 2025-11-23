@@ -1,8 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth';
 import { ProductService, Producto } from '../../services/product';
-import { HeaderComponent } from '../../components/header/header';
+import { HeaderComponent } from '../header/header';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,25 +12,16 @@ import { HeaderComponent } from '../../components/header/header';
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent implements OnInit {
-  private authService = inject(AuthService);
   private productService = inject(ProductService);
+  private authService = inject(AuthService);
   
-  productos = signal<Producto[]>([]);
   currentUser = this.authService.currentUser;
+  productos = signal<Producto[]>([]);
+  
+  productosActivos = computed(() => this.productos().filter(p => p.activo));
 
   ngOnInit() {
-    this.cargarProductos();
-  }
-
-  cargarProductos() {
-    this.productService.getProductos().subscribe({
-      next: (data) => {
-        this.productos.set(data);
-      },
-      error: (err) => {
-        console.error('Error cargando productos:', err);
-      }
-    });
+    this.productService.getProductos().subscribe(data => this.productos.set(data));
   }
 
   logout() {

@@ -8,6 +8,7 @@ export interface Producto {
   precioVenta: number;
   categoria: string;
   activo: boolean;
+  imagenUrl?: string;
 }
 
 @Injectable({
