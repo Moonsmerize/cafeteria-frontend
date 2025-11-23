@@ -47,13 +47,11 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  // --- MÉTODOS PRIVADOS PARA MANEJO DE SESIÓN ---
+  // MÉTODOS PRIVADOS PARA MANEJO DE SESIÓN
 
   private saveSession(response: LoginResponse) {
     localStorage.setItem('cafeteria_token', response.token);
-    // Guardamos datos básicos del usuario
-    localStorage.setItem('cafeteria_user', JSON.stringify(response));
-    
+    localStorage.setItem('cafeteria_user', JSON.stringify(response));   
     this.currentUser.set(response);
     this.autoLogout(response.token);
   }
@@ -67,18 +65,18 @@ export class AuthService {
       const isExpired = decoded.exp * 1000 < Date.now();
 
       if (isExpired) {
-        this.logout(); // Si ya expiró, limpiamos todo
+        this.logout(); 
       } else {
         this.currentUser.set(JSON.parse(userStr));
-        this.autoLogout(token); // Reiniciamos el contador de auto-logout
+        this.autoLogout(token);
       }
     }
   }
 
-  // Lógica de los 10 minutos
+  // Lógica de cierre de sesion al pasar 10 minutos
   private autoLogout(token: string) {
     const decoded: any = jwtDecode(token);
-    const expirationDate = decoded.exp * 1000; // Convertir a milisegundos
+    const expirationDate = decoded.exp * 1000; 
     const timeUntilLogout = expirationDate - Date.now();
 
     console.log(`Sesión expira en: ${timeUntilLogout / 1000} segundos`);
@@ -87,14 +85,12 @@ export class AuthService {
       clearTimeout(this.logoutTimer);
     }
 
-    // Programamos el cierre de sesión automático
     this.logoutTimer = setTimeout(() => {
       alert('Tu sesión ha expirado por inactividad (10 min).');
       this.logout();
     }, timeUntilLogout);
   }
   
-  // Método útil para obtener el token desde interceptors
   getToken() {
     return localStorage.getItem('cafeteria_token');
   }
