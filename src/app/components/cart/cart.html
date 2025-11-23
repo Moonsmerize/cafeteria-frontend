@@ -1,0 +1,62 @@
+<div class="cart-backdrop" 
+     [class.open]="cartService.isOpen()" 
+     (click)="cerrar()">
+</div>
+
+<div class="cart-panel" [class.open]="cartService.isOpen()">
+  
+  <div class="cart-header">
+    <h2>Tu Orden</h2>
+    <button class="btn-close-cart" (click)="cerrar()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="cart-body">
+    @if (cartService.items().length === 0) {
+      <div class="empty-cart">
+        <i class="bi bi-cart-x"></i>
+        <p>Tu carrito está vacío</p>
+        <button class="btn-start" (click)="cerrar()">Ver Menú</button>
+      </div>
+    } @else {
+      <div class="cart-items">
+        @for (item of cartService.items(); track item.id) {
+          <div class="cart-item">
+            <div class="item-info">
+              <span class="item-name">{{ item.nombre }}</span>
+              <span class="item-price">${{ item.precioVenta }}</span>
+            </div>
+            
+            <div class="item-controls">
+              <button (click)="cartService.decreaseQuantity(item.id)">-</button>
+              <span class="qty">{{ item.cantidad }}</span>
+              <button (click)="cartService.increaseQuantity(item.id)">+</button>
+            </div>
+            
+            <div class="item-subtotal">
+              ${{ item.subtotal }}
+            </div>
+            
+            <button class="btn-remove" (click)="cartService.removeFromCart(item.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="cart-footer">
+    <div class="total-row">
+      <span>Total</span>
+      <span class="total-amount">${{ cartService.totalVenta() }}</span>
+    </div>
+    <button class="btn-checkout" 
+            [disabled]="cartService.items().length === 0"
+            (click)="pagar()">
+      Confirmar Pedido
+    </button>
+  </div>
+
+</div>

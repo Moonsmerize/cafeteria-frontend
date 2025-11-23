@@ -9,6 +9,7 @@ export interface Producto {
   categoria: string;
   activo: boolean;
   imagenUrl?: string;
+  esCompuesto?: boolean;
 }
 
 @Injectable({
@@ -22,5 +23,21 @@ export class ProductService {
 
   getProductos() {
     return this.http.get<Producto[]>(this.apiUrl);
+  }
+
+  getProduct(id: number) {
+    return this.http.get<Producto>(`${this.apiUrl}/${id}`);
+  }
+
+  createProduct(producto: Partial<Producto>) {
+    return this.http.post<Producto>(this.apiUrl, producto);
+  }
+
+  updateProduct(id: number, producto: Partial<Producto>) {
+    return this.http.put(`${this.apiUrl}/${id}`, producto);
+  }
+
+  deleteProduct(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

@@ -1,0 +1,22 @@
+<header class="admin-header">
+  <div class="logo-area">
+    <i class="bi bi-shield-lock-fill"></i>
+    <span>Lua's Admin</span>
+  </div>
+
+  <nav>
+    <a routerLink="/admin/products" routerLinkActive="active">Productos</a>
+    <a routerLink="/admin/recipes" routerLinkActive="active">Recetas</a>
+    <a routerLink="/admin/inventory" routerLinkActive="active">Inventario</a>
+    <a routerLink="/admin/users" routerLinkActive="active">Usuarios</a>
+  </nav>
+
+  <div class="actions">
+    <a routerLink="/dashboard" class="btn-return">
+      <i class="bi bi-shop"></i> Ir a la Tienda
+    </a>
+    <button (click)="logout()" class="btn-logout">
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
+</header>

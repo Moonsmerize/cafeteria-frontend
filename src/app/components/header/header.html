@@ -6,13 +6,22 @@
       <span class="brand-name">Lua's Place</span>
     </div>
 
-    <nav class="nav-menu">
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Panel</a>
+    <nav class="nav-menu">         
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Menú</a>
       <a routerLink="/pos" routerLinkActive="active" class="nav-link">Caja</a>
       <a routerLink="/kitchen" routerLinkActive="active" class="nav-link">Cocina</a>
+      @if (isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin</a>
+      }
     </nav>
 
     <div class="user-panel">
+      <button class="action-btn cart-btn" (click)="cartService.toggleCart()">
+        <i class="bi bi-cart-fill"></i>
+        <span class="badge" *ngIf="cartService.totalItems() > 0">
+          {{ cartService.totalItems() }}
+        </span>
+      </button>
       @if (userName && userName !== 'Barista') {
         <div class="user-info">
           <span class="greeting">Hola,</span>
@@ -23,6 +32,7 @@
           <i class="bi bi-box-arrow-right"></i>
           <span class="btn-text">Salir</span>
         </button>
+        
       } @else {
         <button class="action-btn login" routerLink="/login">
           <i class="bi bi-person-fill"></i>

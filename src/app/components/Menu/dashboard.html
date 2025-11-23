@@ -21,9 +21,11 @@
         <div class="card-content">
           <span class="category">{{ prod.categoria }}</span>
           <h3>{{ prod.nombre }}</h3>
-          <button class="btn-order">
+          
+          <button class="btn-order" (click)="agregarAlCarrito(prod)">
             <i class="bi bi-bag-plus"></i> Agregar
           </button>
+          
         </div>
       </div>
     } @empty {
