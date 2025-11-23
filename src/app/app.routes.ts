@@ -4,11 +4,12 @@ import { MenuComponent } from './components/Menu/menu';
 import { HomeComponent } from './components/home/home';
 import { AdminComponent } from './components/admin/admin';
 import { AdminProductsComponent } from './components/admin-products/admin-products';
+import { authGuard, adminGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent }, 
-  { path: 'dashboard', component: MenuComponent }, 
+  { path: 'menu', component: MenuComponent }, 
   { 
     path: 'admin', 
     component: AdminComponent,

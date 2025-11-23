@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-menu',
   standalone: true,
   imports: [CommonModule, HeaderComponent],
   templateUrl: './menu.html',
