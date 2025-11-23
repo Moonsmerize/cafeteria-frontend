@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap');
 
-:host {
-  display: block;
-  width: 100%;
+.app-header {
+  width: 100vw;
+  max-width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 20px;
 }
 
 .app-header {

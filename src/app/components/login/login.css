@@ -1,0 +1,70 @@
+/* Inputs */
+.form-group {
+  text-align: left;
+  margin-bottom: 1.2rem;
+}
+
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #d4a373;
+  z-index: 10;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 45px 12px 40px; 
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-wrapper input:focus {
+  border-color: #d4a373;
+  background-color: #fffbf2;
+}
+
+.input-wrapper input.invalid {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: color 0.3s;
+}
+
+.toggle-password:hover {
+  color: #2c1810;
+}
+
+.validation-error {
+  color: #e74c3c;
+  font-size: 0.75rem;
+  margin-top: 5px;
+  margin-left: 5px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}

@@ -16,16 +16,25 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  showPassword = false;
+
   loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    email: ['', [Validators.required, Validators.email]], 
+    password: ['', [Validators.required, Validators.minLength(3)]] 
   });
 
   errorMessage = '';
   isLoading = false;
 
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
     this.isLoading = true;
     this.errorMessage = '';
@@ -35,15 +44,15 @@ export class LoginComponent {
     this.authService.login(credentials).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/dashboard']); 
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;
         console.error('Error login:', err);
         if (err.status === 401) {
-          this.errorMessage = 'Usuario o contraseña incorrectos.';
+          this.errorMessage = 'Correo o contraseña incorrectos.';
         } else {
-          this.errorMessage = 'Error de conexión con el servidor.';
+          this.errorMessage = 'Error de conexión. Intenta más tarde.';
         }
       }
     });
