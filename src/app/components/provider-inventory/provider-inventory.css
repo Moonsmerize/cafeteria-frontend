@@ -1,0 +1,15 @@
+.container {
+  max-width: 1000px;
+}
+.header-box h1 {
+  font-family: 'Pacifico', cursive;
+  color: #2c1810;
+}
+.table th {
+  font-weight: 600;
+  color: #555;
+}
+
+.table-danger {
+  --bs-table-bg: #fff5f5; 
+}

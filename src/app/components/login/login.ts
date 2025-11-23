@@ -19,8 +19,8 @@ export class LoginComponent {
   showPassword = false;
 
   loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]], 
-    password: ['', [Validators.required, Validators.minLength(3)]] 
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(3)]]
   });
 
   errorMessage = '';
@@ -42,9 +42,17 @@ export class LoginComponent {
     const credentials = this.loginForm.value;
 
     this.authService.login(credentials).subscribe({
-      next: () => {
+      next: (response) => {
         this.isLoading = false;
-        this.router.navigate(['/menu']);
+
+
+        if (response.rol === 'Admin') {
+          this.router.navigate(['/admin']);
+        } else if (response.rol === 'Proveedor') {
+          this.router.navigate(['/provider-inventory']);
+        } else {
+          this.router.navigate(['/menu']);
+        }
       },
       error: (err) => {
         this.isLoading = false;

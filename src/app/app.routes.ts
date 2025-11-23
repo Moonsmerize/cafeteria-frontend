@@ -5,6 +5,8 @@ import { HomeComponent } from './components/home/home';
 import { AdminComponent } from './components/admin/admin';
 import { AdminProductsComponent } from './components/admin-products/admin-products';
 import { adminGuard } from './guards/auth.guard';
+import { ProviderInventoryComponent } from './components/provider-inventory/provider-inventory';
+import { providerGuard } from './guards/provider.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +20,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       { path: 'products', component: AdminProductsComponent }
     ]
+  },
+  { 
+    path: 'provider-inventory', 
+    component: ProviderInventoryComponent,
+    canActivate: [providerGuard]
   },
   { path: '**', redirectTo: '' }
 ];

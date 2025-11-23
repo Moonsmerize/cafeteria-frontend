@@ -1,0 +1,65 @@
+<app-header [userName]="authService.currentUser()?.usuario || 'Proveedor'" (logout)="logout()"></app-header>
+
+<div class="container mt-4">
+  <div class="header-box mb-4">
+    <h1>Portal de Proveedores</h1>
+    <p>Inventario actual y necesidades de reabastecimiento</p>
+  </div>
+
+  @if (lowStockItems().length > 0) {
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <div>
+        Atención: Hay <strong>{{ lowStockItems().length }}</strong> insumos por debajo del stock mínimo.
+      </div>
+    </div>
+  }
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Insumo</th>
+              <th>Descripción</th>
+              <th class="text-center">Stock Actual</th>
+              <th class="text-center">Mínimo Requerido</th>
+              <th class="text-end">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of inventory(); track item.id) {
+              <tr [class.table-danger]="item.stockActual <= item.stockMinimo">
+                <td class="fw-bold">{{ item.nombre }}</td>
+                <td class="text-muted">{{ item.descripcion || '-' }}</td>
+                
+                <td class="text-center">
+                  <span class="badge rounded-pill" 
+                        [class.bg-success]="item.stockActual > item.stockMinimo"
+                        [class.bg-danger]="item.stockActual <= item.stockMinimo">
+                    {{ item.stockActual }}
+                  </span>
+                </td>
+                
+                <td class="text-center">{{ item.stockMinimo }}</td>
+                
+                <td class="text-end">
+                  @if (item.stockActual <= item.stockMinimo) {
+                    <span class="text-danger fw-bold">
+                      <i class="bi bi-cart-plus"></i> SURTIR
+                    </span>
+                  } @else {
+                    <span class="text-success">
+                      <i class="bi bi-check-circle"></i> OK
+                    </span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
