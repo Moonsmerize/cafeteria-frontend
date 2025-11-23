@@ -1,0 +1,28 @@
+<header class="header">
+  <div class="container-fluid header-content">
+    
+    <div class="brand">
+      <i class="bi bi-cup-hot-fill logo-icon"></i>
+      <span class="brand-name">Lua's Place</span>
+    </div>
+
+    <nav class="nav-links d-none d-md-flex">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">Panel</a>
+      <a routerLink="/pos" class="nav-item">Caja</a>
+      <a routerLink="/kitchen" class="nav-item">Cocina</a>
+    </nav>
+
+    <div class="user-section">
+      <div class="user-info d-none d-sm-block">
+        <span class="welcome-text">Hola,</span>
+        <span class="username">{{ userName }}</span>
+      </div>
+      
+      <button class="logout-btn" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span class="d-none d-sm-inline">Salir</span>
+      </button>
+    </div>
+
+  </div>
+</header>

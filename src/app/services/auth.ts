@@ -21,9 +21,9 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private apiUrl = `${environment.apiUrl}/auth`;
-  
+
   currentUser = signal<LoginResponse | null>(null);
-  
+
 
   private logoutTimer: any;
 
@@ -32,18 +32,22 @@ export class AuthService {
   }
 
   login(credentials: any) {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+      tap((response) => {
+        this.saveSession(response);
+      })
+    );
   }
 
   logout() {
     localStorage.removeItem('cafeteria_token');
     localStorage.removeItem('cafeteria_user');
     this.currentUser.set(null);
-    
+
     if (this.logoutTimer) {
       clearTimeout(this.logoutTimer);
     }
-    
+
     this.router.navigate(['/login']);
   }
 
@@ -51,7 +55,7 @@ export class AuthService {
 
   private saveSession(response: LoginResponse) {
     localStorage.setItem('cafeteria_token', response.token);
-    localStorage.setItem('cafeteria_user', JSON.stringify(response));   
+    localStorage.setItem('cafeteria_user', JSON.stringify(response));
     this.currentUser.set(response);
     this.autoLogout(response.token);
   }
@@ -65,7 +69,7 @@ export class AuthService {
       const isExpired = decoded.exp * 1000 < Date.now();
 
       if (isExpired) {
-        this.logout(); 
+        this.logout();
       } else {
         this.currentUser.set(JSON.parse(userStr));
         this.autoLogout(token);
@@ -76,7 +80,7 @@ export class AuthService {
   // Lógica de cierre de sesion al pasar 10 minutos
   private autoLogout(token: string) {
     const decoded: any = jwtDecode(token);
-    const expirationDate = decoded.exp * 1000; 
+    const expirationDate = decoded.exp * 1000;
     const timeUntilLogout = expirationDate - Date.now();
 
     console.log(`Sesión expira en: ${timeUntilLogout / 1000} segundos`);
@@ -90,7 +94,7 @@ export class AuthService {
       this.logout();
     }, timeUntilLogout);
   }
-  
+
   getToken() {
     return localStorage.getItem('cafeteria_token');
   }
