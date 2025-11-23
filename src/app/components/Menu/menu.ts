@@ -9,10 +9,10 @@ import { CartService } from '../../services/cart';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, HeaderComponent],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  templateUrl: './menu.html',
+  styleUrl: './menu.css'
 })
-export class DashboardComponent implements OnInit {
+export class MenuComponent implements OnInit {
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private cartService = inject(CartService);
