@@ -39,4 +39,9 @@ export class ProviderInventoryComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
+
+  printReport() {
+    window.print();
+  }
+// ...
 }

@@ -7,24 +7,20 @@ import { AdminProductsComponent } from './components/admin-products/admin-produc
 import { adminGuard } from './guards/auth.guard';
 import { ProviderInventoryComponent } from './components/provider-inventory/provider-inventory';
 import { providerGuard } from './guards/provider.guard';
+import { AdminUsersComponent } from './components/admin-users/admin-users';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'menu', component: MenuComponent },
-  {
-    path: 'admin',
-    component: AdminComponent,
+  { path: 'admin',component: AdminComponent,
     canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
-      { path: 'products', component: AdminProductsComponent }
-    ]
-  },
-  { 
-    path: 'provider-inventory', 
-    component: ProviderInventoryComponent,
-    canActivate: [providerGuard]
-  },
+      { path: 'products', component: AdminProductsComponent },
+      { path: 'users', component: AdminUsersComponent },
+    ]},
+  { path: 'provider-inventory', component: ProviderInventoryComponent,
+    canActivate: [providerGuard]},
   { path: '**', redirectTo: '' }
 ];
