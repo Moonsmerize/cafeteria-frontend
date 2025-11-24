@@ -8,6 +8,7 @@ import { adminGuard } from './guards/auth.guard';
 import { ProviderInventoryComponent } from './components/provider-inventory/provider-inventory';
 import { providerGuard } from './guards/provider.guard';
 import { AdminUsersComponent } from './components/admin-users/admin-users';
+import { ProviderDashboardComponent } from './components/provider-dashboard/provider-dashboard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,7 +20,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       { path: 'products', component: AdminProductsComponent },
       { path: 'users', component: AdminUsersComponent },
-    ]},
+    ]},{ 
+    path: 'provider-portal',
+    component: ProviderDashboardComponent,
+    canActivate: [providerGuard]
+  },
   { path: 'provider-inventory', component: ProviderInventoryComponent,
     canActivate: [providerGuard]},
   { path: '**', redirectTo: '' }

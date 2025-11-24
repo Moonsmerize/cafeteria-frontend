@@ -49,7 +49,7 @@ export class LoginComponent {
         if (response.rol === 'Admin') {
           this.router.navigate(['/admin']);
         } else if (response.rol === 'Proveedor') {
-          this.router.navigate(['/provider-inventory']);
+          this.router.navigate(['/provider-portal']);
         } else {
           this.router.navigate(['/menu']);
         }
