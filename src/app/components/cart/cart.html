@@ -53,10 +53,10 @@
       <span class="total-amount">${{ cartService.totalVenta() }}</span>
     </div>
     <button class="btn-checkout" 
-            [disabled]="cartService.items().length === 0"
-            (click)="pagar()">
-      Confirmar Pedido
-    </button>
+        [disabled]="cartService.items().length === 0 || isProcessing()"
+        (click)="pagar()">
+  {{ isProcessing() ? 'Procesando...' : 'Confirmar Pedido' }}
+</button>
   </div>
 
 </div>
