@@ -1,0 +1,96 @@
+<div class="admin-container">
+  <div class="page-header">
+    <h1>Inventario de Insumos</h1>
+    <button class="btn-add" (click)="openModal()">
+      <i class="bi bi-plus-lg"></i> Nuevo Insumo
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Stock Actual</th>
+          <th>Mínimo</th>
+          <th>Costo Promedio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.id }}</td>
+            <td><strong>{{ item.nombre }}</strong></td>
+            <td class="text-muted">{{ item.descripcion || '-' }}</td>
+            
+            <td>
+              <span class="stock-badge" 
+                    [class.ok]="item.stockActual > item.stockMinimo"
+                    [class.low]="item.stockActual <= item.stockMinimo">
+                {{ item.stockActual }}
+              </span>
+            </td>
+            
+            <td>{{ item.stockMinimo }}</td>
+            <td>${{ item.costoPromedio }}</td>
+            
+            <td class="actions-cell">
+              <button class="btn-icon edit" (click)="openModal(item)" title="Editar">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn-icon delete" (click)="deleteItem(item.id)" title="Eliminar">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showModal) {
+    <div class="modal-backdrop">
+      <div class="modal-card">
+        <h2>{{ isEditing ? 'Editar' : 'Nuevo' }} Insumo</h2>
+        
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+          
+          <div class="form-group">
+            <label>Nombre del Insumo</label>
+            <input type="text" formControlName="nombre" placeholder="Ej. Grano de Café">
+          </div>
+
+          <div class="form-group">
+            <label>Descripción</label>
+            <input type="text" formControlName="descripcion" placeholder="Marca, tipo, etc.">
+          </div>
+
+          <div class="row">
+            <div class="form-group half">
+              <label>Stock Actual</label>
+              <input type="number" formControlName="stockActual">
+            </div>
+            <div class="form-group half">
+              <label>Stock Mínimo (Alerta)</label>
+              <input type="number" formControlName="stockMinimo">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Costo Promedio ($)</label>
+            <input type="number" formControlName="costoPromedio">
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="btn-save" [disabled]="itemForm.invalid">Guardar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  }
+</div>
