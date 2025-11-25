@@ -11,6 +11,7 @@ import { AdminUsersComponent } from './components/admin-users/admin-users';
 import { ProviderDashboardComponent } from './components/provider-dashboard/provider-dashboard';
 import { AdminInventoryComponent } from './components/admin-inventory/admin-inventory';
 import { AdminRecipesComponent } from './components/admin-recipes/admin-recipes';
+import { AdminRolesComponent } from './components/admin-roles/admin-roles';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ export const routes: Routes = [
       { path: 'users', component: AdminUsersComponent },
       { path: 'inventory', component: AdminInventoryComponent },
       { path: 'recipes', component: AdminRecipesComponent },
+      { path: 'roles', component: AdminRolesComponent },
     ]},
     { 
     path: 'provider-portal',
