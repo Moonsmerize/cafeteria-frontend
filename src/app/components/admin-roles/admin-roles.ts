@@ -39,28 +39,45 @@ export class AdminRolesComponent implements OnInit {
     }
   }
 
-  changeRole(user: Usuario, newRoleId: number) {
-    if (user.idRol === newRoleId) return;
+  hasRole(user: Usuario, roleId: number): boolean {
+    return user.roles?.some(r => r.id === roleId) ?? false;
+  }
 
-    if (user.id === 1) {
-      alert('No se puede cambiar el rol del Super Admin principal.');
-      this.loadMatrixData();
+  toggleRole(user: Usuario, roleId: number, event: any) {
+    const isChecked = event.target.checked;
+
+    if (user.id === 1 && !isChecked && this.hasRole(user, 1) && roleId === 1) {
+      alert('No se puede quitar el rol de Admin al usuario principal.');
+      event.target.checked = true;
       return;
     }
 
-    const updatedUser = { ...user, idRol: newRoleId };
+    let currentRoleIds = user.roles?.map(r => r.id) || [];
+    if (isChecked) {
+      currentRoleIds.push(roleId);
+    } else {
+      currentRoleIds = currentRoleIds.filter(id => id !== roleId);
+    }
 
-    this.userService.updateUsuario(user.id, updatedUser).subscribe({
+    this.userService.updateUserRoles(user.id, currentRoleIds).subscribe({
       next: () => {
-        this.users.update(currentUsers => 
-          currentUsers.map(u => u.id === user.id ? { ...u, idRol: newRoleId } : u)
-        );
+        this.updateLocalUserRoles(user.id, currentRoleIds);
       },
       error: (err) => {
-        alert('Error al actualizar el rol.');
+        alert('Error al actualizar roles.');
         console.error(err);
-        this.loadMatrixData();
+        event.target.checked = !isChecked;
       }
     });
+  }
+
+  private updateLocalUserRoles(userId: number, newRoleIds: number[]) {
+    const newRolesObjects = this.roles().filter(r => newRoleIds.includes(r.id));
+
+    this.users.update(currentUsers => 
+      currentUsers.map(u => 
+        u.id === userId ? { ...u, roles: newRolesObjects } : u
+      )
+    );
   }
 }

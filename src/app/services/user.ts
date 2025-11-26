@@ -11,8 +11,7 @@ export interface Usuario {
   id: number;
   nombreCompleto: string;
   email: string;
-  idRol: number;
-  rol?: Rol;
+  roles?: Rol[];
   activo: boolean;
   password?: string; 
 }
@@ -45,4 +44,8 @@ export class UserService {
   deleteUsuario(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  updateUserRoles(userId: number, roleIds: number[]) {
+  return this.http.put(`${this.apiUrl}/${userId}/roles`, roleIds);
+}
 }

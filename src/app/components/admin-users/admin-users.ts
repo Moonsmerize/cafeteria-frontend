@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService, Usuario } from '../../services/user';
+import { RoleService, Rol } from '../../services/role'; 
 
 @Component({
   selector: 'app-admin-users',
@@ -12,9 +13,11 @@ import { UserService, Usuario } from '../../services/user';
 })
 export class AdminUsersComponent implements OnInit {
   userService = inject(UserService);
+  roleService = inject(RoleService); 
   fb = inject(FormBuilder);
 
   usuarios = signal<Usuario[]>([]);
+  listaRoles = signal<Rol[]>([]); 
   showModal = false;
   isEditing = false;
 
@@ -28,14 +31,12 @@ export class AdminUsersComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.loadUsers();
+    this.loadData();
   }
 
-  loadUsers() {
-    this.userService.getUsuarios().subscribe({
-      next: (data) => this.usuarios.set(data),
-      error: (err) => console.error('Error cargando usuarios', err)
-    });
+  loadData() {
+    this.userService.getUsuarios().subscribe(data => this.usuarios.set(data));
+    this.roleService.getRoles().subscribe(data => this.listaRoles.set(data));
   }
 
   openModal(user?: Usuario) {
@@ -46,11 +47,13 @@ export class AdminUsersComponent implements OnInit {
       this.userForm.get('password')?.clearValidators();
       this.userForm.get('password')?.updateValueAndValidity();
       
+      const roleId = (user.roles && user.roles.length > 0) ? user.roles[0].id : 2;
+
       this.userForm.patchValue({
         id: user.id,
         nombreCompleto: user.nombreCompleto,
         email: user.email,
-        idRol: user.idRol,
+        idRol: roleId,
         activo: user.activo,
         password: ''
       });
@@ -70,16 +73,20 @@ export class AdminUsersComponent implements OnInit {
   onSubmit() {
     if (this.userForm.invalid) return;
 
-    const userData = this.userForm.value;
+    const formValue = this.userForm.value;
+    
+    const userData = {
+      ...formValue,
+    };
 
     if (this.isEditing) {
       this.userService.updateUsuario(userData.id, userData).subscribe(() => {
-        this.loadUsers();
+        this.loadData();
         this.closeModal();
       });
     } else {
       this.userService.createUsuario(userData).subscribe(() => {
-        this.loadUsers();
+        this.loadData();
         this.closeModal();
       });
     }
@@ -87,7 +94,7 @@ export class AdminUsersComponent implements OnInit {
 
   deleteUsuario(id: number) {
     if (confirm('¿Estás seguro de desactivar este usuario?')) {
-      this.userService.deleteUsuario(id).subscribe(() => this.loadUsers());
+      this.userService.deleteUsuario(id).subscribe(() => this.loadData());
     }
   }
 }

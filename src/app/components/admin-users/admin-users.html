@@ -13,8 +13,7 @@
           <th>ID</th>
           <th>Nombre</th>
           <th>Email</th>
-          <th>Rol</th>
-          <th>Estado</th>
+          <th>Roles</th> <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -28,11 +27,17 @@
             <td class="text-muted">{{ user.email }}</td>
             
             <td>
-              <span class="badge-role" 
-                    [class.admin]="user.rol?.nombre === 'Admin'"
-                    [class.provider]="user.rol?.nombre === 'Proveedor'">
-                {{ user.rol?.nombre || 'Sin Rol' }}
-              </span>
+              <div class="roles-container">
+                @for (rol of user.roles; track rol.id) {
+                  <span class="badge-role" 
+                        [class.admin]="rol.nombre === 'Admin'"
+                        [class.provider]="rol.nombre === 'Proveedor'">
+                    {{ rol.nombre }}
+                  </span>
+                } @empty {
+                  <span class="text-muted small">Sin rol</span>
+                }
+              </div>
             </td>
             
             <td>
@@ -87,11 +92,11 @@
 
           <div class="row">
             <div class="form-group half">
-              <label>Rol</label>
+              <label>Rol Principal</label>
               <select formControlName="idRol" class="form-select custom-select">
-                <option [value]="1">Admin</option>
-                <option [value]="2">Empleado</option>
-                <option [value]="3">Proveedor</option>
+                @for (rol of listaRoles(); track rol.id) {
+                  <option [value]="rol.id">{{ rol.nombre }}</option>
+                }
               </select>
             </div>
             
