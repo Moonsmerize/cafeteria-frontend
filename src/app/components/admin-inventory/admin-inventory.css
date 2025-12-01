@@ -91,3 +91,131 @@
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 .btn-cancel { background: #eee; color: #333; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
 .btn-save { background: #2c1810; color: #f3e5ab; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+
+.btn-icon.stock { color: #e67e22; }
+.btn-icon.stock:hover { background-color: #fff3e0; }
+
+/* MODAL RESTOCK */
+.restock-card {
+    width: 600px;
+}
+
+.provider-list {
+    margin: 20px 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.provider-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.provider-option:last-child { border-bottom: none; }
+
+.provider-option:hover { background-color: #f9f9f9; }
+
+.provider-option.selected {
+    background-color: #eef2ff;
+    border-left: 4px solid #4f46e5;
+}
+
+.prov-info { display: flex; flex-direction: column; }
+.prov-name { font-weight: 600; color: #333; }
+.prov-code { font-size: 0.8rem; color: #888; }
+
+.prov-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2c1810;
+}
+
+.order-controls {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.qty-input {
+    width: 100px;
+    padding: 8px;
+    font-size: 1rem;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+}
+
+.order-summary {
+    text-align: right;
+}
+.order-summary span { display: block; font-size: 0.85rem; color: #666; }
+.order-summary strong { font-size: 1.3rem; color: #27ae60; }
+
+.empty-providers {
+    padding: 30px;
+    text-align: center;
+    color: #999;
+}
+.empty-providers i { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+/* Header actions container */
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-history {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.btn-history:hover { background: #2c3e50; }
+
+/* Modal de Órdenes más ancho */
+.orders-modal-card {
+    width: 800px;
+    max-width: 95%;
+}
+
+.modal-header-row {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+.close-x { font-size: 1.2rem; color: #888; }
+
+/* Botón Recibir */
+.btn-receive {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex; align-items: center; gap: 5px;
+}
+.btn-receive:hover { background: #219150; }
+
+/* Badges de estado */
+.status-badge {
+    padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;
+}
+.status-badge.pending { background: #fff3cd; color: #856404; }
+.status-badge.received { background: #d4edda; color: #155724; }

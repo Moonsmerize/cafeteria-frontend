@@ -40,3 +40,45 @@
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+/* Estilos para Orders */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.order-id { font-size: 1.2rem; font-weight: bold; color: #2c1810; }
+.order-date { color: #888; margin-left: 10px; font-size: 0.9rem; }
+
+.order-total { font-size: 1.2rem; font-weight: bold; color: #27ae60; margin-left: 15px; }
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #eee;
+}
+.status-badge.pending { background: #fff3cd; color: #856404; }
+
+/* Tabla interna de detalles */
+.details-table { width: 100%; font-size: 0.9rem; }
+.details-table th { text-align: left; color: #888; font-weight: 500; padding-bottom: 5px; }
+.details-table td { padding: 5px 0; border-top: 1px solid #f9f9f9; }

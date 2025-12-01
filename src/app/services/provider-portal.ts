@@ -11,6 +11,19 @@ export interface ProductoProveedor {
   codigoCatalogoProveedor: string;
 }
 
+export interface PedidoProveedor {
+  id: number;
+  fecha: string;
+  solicitante: string;
+  total: number;
+  estado: string;
+  detalles: {
+    insumo: string;
+    cantidad: number;
+    costoPactado: number;
+  }[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,4 +48,9 @@ export class ProviderPortalService {
   updateProducto(idRelacion: number, datos: { precioUltimoCosto: number, codigoCatalogoProveedor: string }) {
     return this.http.put(`${this.apiUrl}/producto/${idRelacion}`, datos);
   }
+
+  getMisPedidos() {
+    return this.http.get<PedidoProveedor[]>(`${this.apiUrl}/pedidos`);
+  }
+  
 }

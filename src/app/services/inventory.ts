@@ -11,6 +11,13 @@ export interface Inventario {
   costoPromedio: number;
 }
 
+export interface ProveedorInsumo {
+  idProveedor: number;
+  nombreEmpresa: string;
+  ultimoCosto: number;
+  codigoCatalogo: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,5 +45,9 @@ export class InventoryService {
 
   deleteItem(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  getProvidersByInventory(id: number) {
+    return this.http.get<ProveedorInsumo[]>(`${this.apiUrl}/${id}/proveedores`);
   }
 }

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProviderPortalService, ProductoProveedor } from '../../services/provider-portal';
+import { ProviderPortalService, ProductoProveedor, PedidoProveedor } from '../../services/provider-portal';
 import { ProviderInventoryComponent } from '../provider-inventory/provider-inventory'; // Reutilizamos el componente anterior
 import { HeaderComponent } from '../header/header';
 import { AuthService } from '../../services/auth';
@@ -18,20 +18,21 @@ export class ProviderDashboardComponent implements OnInit {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
 
-  activeTab = signal<'inventory' | 'products' | 'profile'>('inventory');
-
+  activeTab = signal<'inventory' | 'products' | 'profile' | 'orders'>('orders');
   misProductos = signal<ProductoProveedor[]>([]);
-  
+  misPedidos = signal<PedidoProveedor[]>([])
+
   profileForm: FormGroup = this.fb.group({
-    nombreEmpresa: [{value: '', disabled: true}], 
+    nombreEmpresa: [{ value: '', disabled: true }],
     nombreContacto: ['', Validators.required],
     telefono: ['', Validators.required],
-    email: [{value: '', disabled: true}] 
+    email: [{ value: '', disabled: true }]
   });
 
   ngOnInit() {
     this.loadProducts();
     this.loadProfile();
+    this.loadOrders();
   }
 
   loadProducts() {
@@ -44,6 +45,13 @@ export class ProviderDashboardComponent implements OnInit {
     });
   }
 
+  loadOrders() {
+    this.portalService.getMisPedidos().subscribe({
+      next: (data) => this.misPedidos.set(data),
+      error: (err) => console.error('Error cargando pedidos', err)
+    });
+  }
+
   saveProfile() {
     if (this.profileForm.invalid) return;
     this.portalService.updatePerfil(this.profileForm.getRawValue()).subscribe(() => {
@@ -53,9 +61,9 @@ export class ProviderDashboardComponent implements OnInit {
 
   updateProduct(prod: ProductoProveedor, nuevoPrecio: string, nuevoCodigo: string) {
     const precio = parseFloat(nuevoPrecio);
-    this.portalService.updateProducto(prod.id, { 
-      precioUltimoCosto: precio, 
-      codigoCatalogoProveedor: nuevoCodigo 
+    this.portalService.updateProducto(prod.id, {
+      precioUltimoCosto: precio,
+      codigoCatalogoProveedor: nuevoCodigo
     }).subscribe({
       next: () => alert('Producto actualizado'),
       error: () => alert('Error al actualizar')

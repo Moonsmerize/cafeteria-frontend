@@ -1,9 +1,15 @@
 <div class="admin-container">
+  
   <div class="page-header">
     <h1>Inventario de Insumos</h1>
-    <button class="btn-add" (click)="openModal()">
-      <i class="bi bi-plus-lg"></i> Nuevo Insumo
-    </button>
+    <div class="header-actions">
+      <button class="btn-add" (click)="openModal()">
+        <i class="bi bi-plus-lg"></i> Nuevo Insumo
+      </button>
+      <button class="btn-history" (click)="openOrdersModal()">
+        <i class="bi bi-clock-history"></i> Ver Pedidos
+      </button>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -12,10 +18,9 @@
         <tr>
           <th>ID</th>
           <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Stock Actual</th>
+          <th>Stock</th>
           <th>Mínimo</th>
-          <th>Costo Promedio</th>
+          <th>Costo Prom.</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -23,8 +28,10 @@
         @for (item of items(); track item.id) {
           <tr>
             <td>{{ item.id }}</td>
-            <td><strong>{{ item.nombre }}</strong></td>
-            <td class="text-muted">{{ item.descripcion || '-' }}</td>
+            <td>
+              <strong>{{ item.nombre }}</strong><br>
+              <small class="text-muted">{{ item.descripcion }}</small>
+            </td>
             
             <td>
               <span class="stock-badge" 
@@ -41,6 +48,11 @@
               <button class="btn-icon edit" (click)="openModal(item)" title="Editar">
                 <i class="bi bi-pencil-fill"></i>
               </button>
+              
+              <button class="btn-icon stock" (click)="openRestockModal(item)" title="Surtir (Hacer Pedido)">
+                <i class="bi bi-cart-plus-fill"></i>
+              </button>
+
               <button class="btn-icon delete" (click)="deleteItem(item.id)" title="Eliminar">
                 <i class="bi bi-trash-fill"></i>
               </button>
@@ -93,4 +105,119 @@
       </div>
     </div>
   }
+
+  @if (showRestockModal) {
+    <div class="modal-backdrop">
+      <div class="modal-card restock-card">
+        <h2>Surtir: {{ selectedRestockItem?.nombre }}</h2>
+        <p class="text-muted">Selecciona un proveedor para generar la orden de compra.</p>
+
+        <div class="restock-body">
+          
+          <div class="provider-list">
+            @for (prov of proveedoresDisponibles(); track prov.idProveedor) {
+              <div class="provider-option" 
+                   [class.selected]="selectedProvider?.idProveedor === prov.idProveedor"
+                   (click)="selectProvider(prov)">
+                <div class="prov-info">
+                  <span class="prov-name">{{ prov.nombreEmpresa }}</span>
+                  <span class="prov-code">Catálogo: {{ prov.codigoCatalogo || 'N/A' }}</span>
+                </div>
+                <div class="prov-price">
+                  ${{ prov.ultimoCosto }} <small>/u</small>
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-providers">
+                <i class="bi bi-exclamation-circle"></i>
+                <p>No hay proveedores asignados a este producto.</p>
+                <small>Ve al módulo de Proveedores para asignar este insumo.</small>
+              </div>
+            }
+          </div>
+
+          @if (selectedProvider) {
+            <div class="order-controls">
+              <div class="form-group">
+                <label>Cantidad a Pedir</label>
+                <input type="number" [(ngModel)]="cantidadSurtir" min="1" class="qty-input">
+              </div>
+              <div class="order-summary">
+                <span>Total Estimado:</span>
+                <strong>${{ (cantidadSurtir * selectedProvider.ultimoCosto).toFixed(2) }}</strong>
+              </div>
+            </div>
+          }
+
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeRestockModal()">Cancelar</button>
+          <button class="btn-save" 
+                  [disabled]="!selectedProvider || cantidadSurtir <= 0"
+                  (click)="confirmRestock()">
+            <i class="bi bi-check-lg"></i> Generar Orden
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  @if (showOrdersModal) {
+    <div class="modal-backdrop">
+      <div class="modal-card orders-modal-card">
+        <div class="modal-header-row">
+          <h2>Historial de Compras</h2>
+          <button class="btn-icon close-x" (click)="closeOrdersModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Proveedor</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ord of orders(); track ord.id) {
+                <tr>
+                  <td>{{ ord.id }}</td>
+                  <td>{{ ord.fecha | date:'shortDate' }}</td>
+                  <td>{{ ord.proveedor }}</td>
+                  <td>${{ ord.total }}</td>
+                  <td>
+                    <span class="status-badge" 
+                          [class.pending]="ord.estado === 'PENDIENTE'"
+                          [class.received]="ord.estado === 'RECIBIDA'">
+                      {{ ord.estado }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (ord.estado === 'PENDIENTE') {
+                      <button class="btn-receive" (click)="confirmReception(ord)" title="Recibir Mercancía">
+                        <i class="bi bi-box-seam-fill"></i> Recibir
+                      </button>
+                    } @else {
+                      <span class="text-muted"><i class="bi bi-check2-all"></i></span>
+                    }
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="text-center">No hay órdenes registradas.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
 </div>

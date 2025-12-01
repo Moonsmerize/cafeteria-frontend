@@ -3,6 +3,9 @@
 <div class="admin-container">
   
   <div class="tabs-header">
+    <button class="tab-btn" [class.active]="activeTab() === 'orders'" (click)="activeTab.set('orders')">
+      <i class="bi bi-receipt"></i> Pedidos Recibidos
+    </button>
     <button class="tab-btn" [class.active]="activeTab() === 'inventory'" (click)="activeTab.set('inventory')">
       <i class="bi bi-box-seam"></i> Necesidades de Surtido
     </button>
@@ -15,6 +18,62 @@
   </div>
 
   <div class="tab-content">
+    
+    @if (activeTab() === 'orders') {
+      <div class="page-header">
+        <h2>Bandeja de Pedidos</h2>
+        <button class="btn-icon edit" (click)="loadOrders()" title="Actualizar">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+      </div>
+
+      <div class="orders-list">
+        @for (pedido of misPedidos(); track pedido.id) {
+          <div class="order-card">
+            <div class="order-header">
+              <div class="header-left">
+                <span class="order-id">#{{ pedido.id }}</span>
+                <span class="order-date">{{ pedido.fecha | date:'medium' }}</span>
+              </div>
+              <div class="header-right">
+                <span class="status-badge" [class.pending]="pedido.estado === 'PENDIENTE'">
+                  {{ pedido.estado }}
+                </span>
+                <span class="order-total">${{ pedido.total }}</span>
+              </div>
+            </div>
+            
+            <div class="order-details">
+              <p class="solicitante">Solicitado por: <strong>{{ pedido.solicitante }}</strong></p>
+              <table class="details-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (det of pedido.detalles; track $index) {
+                    <tr>
+                      <td>{{ det.insumo }}</td>
+                      <td>{{ det.cantidad }}</td>
+                      <td>${{ det.costoPactado }}</td>
+                      <td>${{ det.cantidad * det.costoPactado }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <p>No tienes pedidos pendientes por ahora.</p>
+          </div>
+        }
+      </div>
+    }
     
     @if (activeTab() === 'inventory') {
       <app-provider-inventory></app-provider-inventory>
