@@ -12,6 +12,7 @@ import { ProviderDashboardComponent } from './components/provider-dashboard/prov
 import { AdminInventoryComponent } from './components/admin-inventory/admin-inventory';
 import { AdminRecipesComponent } from './components/admin-recipes/admin-recipes';
 import { AdminRolesComponent } from './components/admin-roles/admin-roles';
+import { AdminPermissionsComponent } from './components/admin-permissions/admin-permissions';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,6 +27,7 @@ export const routes: Routes = [
       { path: 'inventory', component: AdminInventoryComponent },
       { path: 'recipes', component: AdminRecipesComponent },
       { path: 'roles', component: AdminRolesComponent },
+      { path: 'permissions', component: AdminPermissionsComponent },
     ]},
     { 
     path: 'provider-portal',
